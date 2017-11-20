@@ -1,0 +1,3 @@
+/home/rk/Amy/mycode/ZED_dataset_collection/build/CMakeFiles/edit_cache.dir
+/home/rk/Amy/mycode/ZED_dataset_collection/build/CMakeFiles/rebuild_cache.dir
+/home/rk/Amy/mycode/ZED_dataset_collection/build/CMakeFiles/ZED_Data_Collection.dir
