@@ -57,6 +57,7 @@ int main(int argc, char **argv) {
     }
     std::cout<<"Duration: "<< duration <<'\n';
 
+
     // Create a ZED camera object
     Camera zed;
 
@@ -131,6 +132,7 @@ int main(int argc, char **argv) {
             //Set the timer interval
             //std::clock_t start;
             //double duration = 0;
+
             start = std::clock();
             while(duration < interval){
                 duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
