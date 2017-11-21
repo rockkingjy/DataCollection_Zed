@@ -14,8 +14,8 @@
 
 const std::string helpString = "[d] Save Depth, [n] Change Depth format, [p] Save Point Cloud, [m] Change Point Cloud format, [q] Quit";
 const std::string prefixPointCloud = "Cloud_"; // Default PointCloud output file prefix
-const std::string prefixDepth = "Depth_"; // Default Depth image output file prefix
-const std::string prefixLeft = "Left_";
+const std::string prefixDepth = "/Depth_"; // Default Depth image output file prefix
+const std::string prefixLeft = "/Left_";
 
 const std::string path = "/home/rk/Amy/mycode/ZED_dataset_collection/img/"; //The path to save the images
 const int interval = 1; //The time interval of saving images: unit is second

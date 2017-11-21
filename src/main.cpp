@@ -37,6 +37,9 @@
 #include <cstdio>
 #include <ctime>
 
+#include <sys/types.h>
+#include <sys/stat.h>
+
 
 using namespace sl;
 
@@ -64,7 +67,7 @@ int main(int argc, char **argv) {
     }
 
     // Display help in console
-    printHelp();
+//    printHelp();
 
     // Set runtime parameters after opening the camera
     RuntimeParameters runtime_parameters;
@@ -85,7 +88,17 @@ int main(int argc, char **argv) {
 
     // Loop until 'q' is pressed
     char key = ' ';
+    int count_file = 0;
     int count_save = 0;
+    // Check whether the folder is exist. 
+    std::string filefolder = path + std::to_string(count_file);
+    while(std::ifstream(filefolder)) {
+        std::cout<<"Folder "<<filefolder<<" exists."<<std::endl;
+        count_file += 1;
+        filefolder = path + std::to_string(count_file);
+    }            
+    mkdir(filefolder.c_str(), 0700);
+    std::cout<<"Folder "<<filefolder<<" created."<<std::endl;
 
     while (key != 'q') {
 
@@ -106,17 +119,18 @@ int main(int argc, char **argv) {
             // Handle key event
             key = cv::waitKey(10);
             processKeyEvent(zed, key);
-*/
+*/          
+            //Set the timer interval
             std::clock_t start;
             double duration = 0;
             start = std::clock();
-
             while(duration < interval){
                 duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
             }
             std::cout<<"Duration: "<< duration <<'\n';
-            saveLeftImage(zed, path + prefixLeft + std::to_string(count_save) + std::string(".png"));
-            saveDepth(zed, path + prefixDepth + std::to_string(count_save));
+            //save images
+            saveLeftImage(zed, filefolder.c_str() + prefixLeft + std::to_string(count_save) + std::string(".png"));
+            saveDepth(zed, filefolder.c_str() + prefixDepth + std::to_string(count_save));
             
             count_save++;
         }
