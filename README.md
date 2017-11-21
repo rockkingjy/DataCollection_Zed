@@ -20,3 +20,11 @@ const int interval = 1; //The time interval of saving images: unit is second
 # Reference
 
 https://github.com/stereolabs/zed-opencv
+
+# How to set the programme start at boot up
+```sh
+sudo cp ./ZED  /etc/init.d/ZED
+sudo chmod +x /etc/init.d/ZED
+sudo update-rc.d ZED defaults
+```
+
