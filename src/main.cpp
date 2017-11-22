@@ -48,15 +48,19 @@ void printHelp();
 
 
 int main(int argc, char **argv) {
-    //Set the timer interval
+    //logfile
+    std::ofstream filestream(logfile.c_str());
+    //Wait for the mounting
     std::clock_t start;
     double duration = 0;
     start = std::clock();
-    while(duration < interval*30){
+/*
+    while(duration < interval){
     	duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
     }
-    std::cout<<"Duration: "<< duration <<'\n';
-
+*/
+    std::cout << "Duration: "<< duration <<std::endl;
+    filestream << "Duration: "<< duration <<std::endl;
 
     // Create a ZED camera object
     Camera zed;
@@ -103,45 +107,28 @@ int main(int argc, char **argv) {
     std::string filefolder = path + std::to_string(count_file);
     while(std::ifstream(filefolder)) {
         std::cout<<"Folder "<<filefolder<<" exists."<<std::endl;
+	filestream<<"Folder"<<filefolder<<" exists."<<std::endl;
         count_file += 1;
         filefolder = path + std::to_string(count_file);
     }            
     mkdir(filefolder.c_str(), 0700);
     std::cout<<"Folder "<<filefolder<<" created."<<std::endl;
+    filestream<<"Folder"<<filefolder<<" created."<<std::endl;
 
     while (key != 'q') {
-
         if (zed.grab(runtime_parameters) == SUCCESS) {
-/*
-            // Retrieve the left image, depth image in half-resolution
-            zed.retrieveImage(image_zed, VIEW_LEFT, MEM_CPU, new_width, new_height);
-            zed.retrieveImage(depth_image_zed, VIEW_DEPTH, MEM_CPU, new_width, new_height);
-
-            // Retrieve the RGBA point cloud in half-resolution
-            // To learn how to manipulate and display point clouds, see Depth Sensing sample
-            zed.retrieveMeasure(point_cloud, MEASURE_XYZRGBA, MEM_CPU, new_width, new_height);
-
-            // Display image and depth using cv:Mat which share sl:Mat data
-            cv::imshow("Image", image_ocv);
-            cv::imshow("Depth", depth_image_ocv);
-
-            // Handle key event
-            key = cv::waitKey(10);
-            processKeyEvent(zed, key);
-*/          
-            //Set the timer interval
-            //std::clock_t start;
-            //double duration = 0;
-
             start = std::clock();
             while(duration < interval){
                 duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
             }
-            std::cout<<"Duration: "<< duration <<'\n';
+            std::cout << "Duration: "<< duration <<std::endl;
+    	    filestream << "Duration: "<< duration <<std::endl;
+	    duration = 0;
             //save images
             saveLeftImage(zed, filefolder.c_str() + prefixLeft + std::to_string(count_save) + std::string(".png"));
             saveDepth(zed, filefolder.c_str() + prefixDepth + std::to_string(count_save));
             
+    	    filestream << "Image "<< count_save << " save into folder: "<< filefolder <<std::endl;
             count_save++;
         }
     }
