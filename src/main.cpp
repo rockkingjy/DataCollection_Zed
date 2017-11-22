@@ -58,10 +58,10 @@ int main(int argc, char **argv) {
     while(duration < interval){
     	duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
     }
-*/
+
     std::cout << "Duration: "<< duration <<std::endl;
     filestream << "Duration: "<< duration <<std::endl;
-
+*/
     // Create a ZED camera object
     Camera zed;
 
@@ -122,13 +122,13 @@ int main(int argc, char **argv) {
                 duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
             }
             std::cout << "Duration: "<< duration <<std::endl;
-    	    filestream << "Duration: "<< duration <<std::endl;
+    	    //filestream << "Duration: "<< duration <<std::endl;
 	    duration = 0;
             //save images
             saveLeftImage(zed, filefolder.c_str() + prefixLeft + std::to_string(count_save) + std::string(".png"));
             saveDepth(zed, filefolder.c_str() + prefixDepth + std::to_string(count_save));
             
-    	    filestream << "Image "<< count_save << " save into folder: "<< filefolder <<std::endl;
+    	    //filestream << "Image "<< count_save << " save into folder: "<< filefolder <<std::endl;
             count_save++;
         }
     }
