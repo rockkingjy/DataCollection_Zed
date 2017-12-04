@@ -16,10 +16,9 @@ const std::string helpString = "[d] Save Depth, [n] Change Depth format, [p] Sav
 const std::string prefixPointCloud = "Cloud_"; // Default PointCloud output file prefix
 const std::string prefixDepth = "/Depth_"; // Default Depth image output file prefix
 const std::string prefixLeft = "/Left_";
-const std::string logfile = "/home/nvidia/amy/mycode/ZedDataCollection-master/aprint.txt";//The path of the logfile
-const std::string path = "/media/nvidia/img/"; //The path to save the images
-//const std::string path = "/home/nvidia/amy/mycode/ZedDataCollection-master/img/";
-const int interval = 5; //The time interval of saving images: unit is second
+const std::string logfile = "/home/nvidia/Desktop/ZEDlog.txt";//The path of the logfile
+const std::string path = "/media/nvidia/zed/img/"; //The path to save the images
+const int interval = 2; //The time interval of saving images: unit is second
 
 std::string getPointCloudFormatName(sl::POINT_CLOUD_FORMAT f);
 std::string getDepthFormatName(sl::DEPTH_FORMAT f);

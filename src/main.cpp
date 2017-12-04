@@ -39,7 +39,7 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
-
+#include <dirent.h>
 
 using namespace sl;
 
@@ -50,37 +50,63 @@ void printHelp();
 int main(int argc, char **argv) {
     //logfile
     std::ofstream filestream(logfile.c_str());
-    //Wait for the mounting
+    filestream<<"Start running ZED programme..."<<std::endl;
+
+    //mount the sd card
+    int ret;
+    ret = system("mkdir /media/nvidia/zed/");
+    ret = system("mount /dev/mmcblk1p1 /media/nvidia/zed/");
+    while (ret != 0) {
+        filestream<<"SD card mount failed."<<std::endl;
+    }
+    filestream<<"SD card mounted to /media/nvidia/zed/"<<std::endl;
+    //Waiting for boot up
     std::clock_t start;
     double duration = 0;
+
     start = std::clock();
-/*
-    while(duration < interval){
+
+    while(duration < 10){
     	duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
     }
-
-    std::cout << "Duration: "<< duration <<std::endl;
     filestream << "Duration: "<< duration <<std::endl;
-*/
+
+    //imgfile for store the images
+    DIR* dir = opendir(path.c_str());
+    if (dir)
+    {
+    /* Directory exists. */
+        filestream<<"Folder Img/ already exists."<<std::endl;
+        closedir(dir);
+    } else if (ENOENT == errno)
+    {
+    /* Directory does not exist. */
+        filestream<<"Folder Img/ does not exist."<<std::endl;
+        mkdir(path.c_str(), 0777);
+        filestream<<"Folder Img/ created."<<std::endl;
+    } else {
+    /* opendir() failed for some other reason. */
+        filestream<<"Error in Folder Img/."<<std::endl;
+    }
+
     // Create a ZED camera object
     Camera zed;
-
-    // Set configuration parameters
     InitParameters init_params;
     init_params.camera_resolution = RESOLUTION_HD1080;
     init_params.depth_mode = DEPTH_MODE_PERFORMANCE;
     init_params.coordinate_units = UNIT_METER;
 
     // Open the camera
+    filestream<<"Opening camera..."<<std::endl;
     ERROR_CODE err = zed.open(init_params);
     if (err != SUCCESS) {
         printf("%s\n", errorCode2str(err).c_str());
+        filestream<<errorCode2str(err).c_str()<<std::endl;
         zed.close();
-        return 1; // Quit if an error occurred
+        err = zed.open(init_params);
+        //return 1; // Quit if an error occurred
     }
-
-    // Display help in console
-//    printHelp();
+    filestream<<"Camera open succeed!"<<std::endl;	
 
     // Set runtime parameters after opening the camera
     RuntimeParameters runtime_parameters;
@@ -103,7 +129,8 @@ int main(int argc, char **argv) {
     char key = ' ';
     int count_file = 0;
     int count_save = 0;
-    // Check whether the folder is exist. 
+
+    // Check whether the sub folder is exist. 
     std::string filefolder = path + std::to_string(count_file);
     while(std::ifstream(filefolder)) {
         std::cout<<"Folder "<<filefolder<<" exists."<<std::endl;
@@ -111,7 +138,7 @@ int main(int argc, char **argv) {
         count_file += 1;
         filefolder = path + std::to_string(count_file);
     }            
-    mkdir(filefolder.c_str(), 0700);
+    mkdir(filefolder.c_str(), 0777);
     std::cout<<"Folder "<<filefolder<<" created."<<std::endl;
     filestream<<"Folder"<<filefolder<<" created."<<std::endl;
 
@@ -126,11 +153,20 @@ int main(int argc, char **argv) {
 	    duration = 0;
             //save images
             saveLeftImage(zed, filefolder.c_str() + prefixLeft + std::to_string(count_save) + std::string(".png"));
-            saveDepth(zed, filefolder.c_str() + prefixDepth + std::to_string(count_save));
-            
-    	    //filestream << "Image "<< count_save << " save into folder: "<< filefolder <<std::endl;
+            saveDepth(zed, filefolder.c_str() + prefixDepth + std::to_string(count_save));           
+    	    filestream << "Image "<< count_save << " save into folder: "<< filefolder <<std::endl;
             count_save++;
-        }
+        } else {
+	    	filestream<<"ZED grab fail!"<<std::endl;
+	    	zed.close();
+	    	err = zed.open(init_params);
+    	    if (err != SUCCESS) {
+        	    printf("%s\n", errorCode2str(err).c_str());
+        	    filestream<<errorCode2str(err).c_str()<<std::endl;
+        	    zed.close();
+        	    err = zed.open(init_params);
+    	    }
+	    }
     }
     zed.close();
     return 0;
@@ -159,14 +195,3 @@ cv::Mat slMat2cvMat(Mat& input) {
     return cv::Mat(input.getHeight(), input.getWidth(), cv_type, input.getPtr<sl::uchar1>(MEM_CPU));
 }
 
-/**
-* This function displays help in console
-**/
-void printHelp() {
-    std::cout << " Press 'l' to save Left images" << std::endl;
-    std::cout << " Press 's' to save Side by side images" << std::endl;
-    std::cout << " Press 'p' to save Point Cloud" << std::endl;
-    std::cout << " Press 'd' to save Depth image" << std::endl;
-    std::cout << " Press 'm' to switch Point Cloud format" << std::endl;
-    std::cout << " Press 'n' to switch Depth format" << std::endl;
-}

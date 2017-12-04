@@ -9,7 +9,6 @@
 # Description:       Zed data collcetion
 ### END INIT INFO
 
-mount -t ntfs /dev/mmcblk1p1 /media/nvidia/
 
 /home/nvidia/amy/mycode/ZedDataCollection-master/build/ZED_Data_Collection
 
