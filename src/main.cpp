@@ -57,7 +57,7 @@ int main(int argc, char **argv) {
     double duration = 0;
 
     start = std::clock();
-    while(duration < 10){
+    while(duration < 20){
     	duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
     }
     filestream << "Duration: "<< duration <<std::endl;
@@ -152,7 +152,7 @@ int main(int argc, char **argv) {
             }
             std::cout << "Duration: "<< duration <<std::endl;
     	    //filestream << "Duration: "<< duration <<std::endl;
-	    duration = 0;
+	        duration = 0;
             //save images
             saveLeftImage(zed, filefolder.c_str() + prefixLeft + std::to_string(count_save) + std::string(".png"));
             saveDepth(zed, filefolder.c_str() + prefixDepth + std::to_string(count_save));           
