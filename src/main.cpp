@@ -52,24 +52,26 @@ int main(int argc, char **argv) {
     std::ofstream filestream(logfile.c_str());
     filestream<<"Start running ZED programme..."<<std::endl;
 
-    //mount the sd card
-    int ret;
-    ret = system("mkdir /media/nvidia/zed/");
-    ret = system("mount /dev/mmcblk1p1 /media/nvidia/zed/");
-    while (ret != 0) {
-        filestream<<"SD card mount failed."<<std::endl;
-    }
-    filestream<<"SD card mounted to /media/nvidia/zed/"<<std::endl;
     //Waiting for boot up
     std::clock_t start;
     double duration = 0;
 
     start = std::clock();
-
     while(duration < 10){
     	duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
     }
     filestream << "Duration: "<< duration <<std::endl;
+
+    //mount the sd card
+    int ret;
+    ret = system("mkdir /media/nvidia/zed/");
+    ret = system("umount /dev/mmcblk1p1");
+    ret = system("mount /dev/mmcblk1p1 /media/nvidia/zed/");
+    while (ret != 0) {
+        ret = system("mount /dev/mmcblk1p1 /media/nvidia/zed/");
+        filestream<<"SD card mount failed."<<std::endl;
+    }
+    filestream<<"SD card mounted to /media/nvidia/zed/"<<std::endl;
 
     //imgfile for store the images
     DIR* dir = opendir(path.c_str());
