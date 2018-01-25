@@ -9,6 +9,6 @@
 # Description:       Zed data collcetion
 ### END INIT INFO
 
+echo nvidia | sudo -S /home/nvidia/amy/ZED_dataset_collection/build/ZED_Data_Collection
 
-/home/nvidia/amy/mycode/ZedDataCollection-master/build/ZED_Data_Collection
 

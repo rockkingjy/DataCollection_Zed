@@ -23,6 +23,8 @@ const int interval = 2; //The time interval of saving images: unit is second
 https://github.com/stereolabs/zed-opencv
 
 # How to set the programme start at boot up
+Set the linux to boot up without login by: System Settings -> User Accounts -> Automatic Login ON
+
 ```sh
 sudo cp ./ZED  /etc/init.d/ZED
 sudo chmod +x /etc/init.d/ZED
