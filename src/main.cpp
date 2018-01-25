@@ -48,7 +48,13 @@ void printHelp();
 
 
 int main(int argc, char **argv) {
-    //logfile
+    int ret;//return for system commands
+    //logfile remove old one and create new one;
+    std::ifstream fin(logfile.c_str());
+    if (fin) {
+        std::cout << "deleting file..." << std::endl;
+        ret = system("rm /home/nvidia/Desktop/ZEDlog.txt");
+    }
     std::ofstream filestream(logfile.c_str());
     filestream<<"Start running ZED programme..."<<std::endl;
 
@@ -57,13 +63,12 @@ int main(int argc, char **argv) {
     double duration = 0;
 
     start = std::clock();
-    while(duration < 20){
+    while(duration < 30){
     	duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
     }
     filestream << "Duration: "<< duration <<std::endl;
 
     //mount the sd card
-    int ret;
     ret = system("mkdir /media/nvidia/zed/");
     ret = system("umount /dev/mmcblk1p1");
     ret = system("mount /dev/mmcblk1p1 /media/nvidia/zed/");
@@ -116,8 +121,8 @@ int main(int argc, char **argv) {
 
     // Prepare new image size to retrieve half-resolution images
     Resolution image_size = zed.getResolution();
-    int new_width = image_size.width / 2;
-    int new_height = image_size.height / 2;
+    int new_width = image_size.width;// / 2;
+    int new_height = image_size.height;// / 2;
 
     // To share data between sl::Mat and cv::Mat, use slMat2cvMat()
     // Only the headers and pointer to the sl::Mat are copied, not the data itself

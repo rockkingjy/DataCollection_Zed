@@ -18,7 +18,7 @@ const std::string prefixDepth = "/Depth_"; // Default Depth image output file pr
 const std::string prefixLeft = "/Left_";
 const std::string logfile = "/home/nvidia/Desktop/ZEDlog.txt";//The path of the logfile
 const std::string path = "/media/nvidia/zed/img/"; //The path to save the images
-const int interval = 2; //The time interval of saving images: unit is second
+const int interval = 1; //The time interval of saving images: unit is second
 
 std::string getPointCloudFormatName(sl::POINT_CLOUD_FORMAT f);
 std::string getDepthFormatName(sl::DEPTH_FORMAT f);
