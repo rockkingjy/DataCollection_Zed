@@ -1,0 +1,14 @@
+#! /bin/sh
+### BEGIN INIT INFO
+# Provides:          ZED
+# Required-Start:    $all
+# Required-Stop:     $local_fs
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Zed data collcetion
+# Description:       Zed data collcetion
+### END INIT INFO
+
+echo nvidia | sudo -S /home/nvidia/amy/ZED_dataset_collection/build/ZED_Data_Collection
+
+
