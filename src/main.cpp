@@ -49,12 +49,13 @@ void printHelp();
 
 int main(int argc, char **argv) {
     int ret;//return for system commands
+
     //Waiting for boot up
     std::clock_t start;
     double duration = 0;
     std::cout << "Starting the programme..." << std::endl;
     start = std::clock();
-    while(duration < 30){
+    while(duration < 20){
     	duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
     }
     //std::cout << "Duration: "<< duration <<std::endl;
