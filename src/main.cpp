@@ -141,26 +141,30 @@ int main(int argc, char **argv) {
     std::string filefolder = path + std::to_string(count_file);
     while(std::ifstream(filefolder)) {
         std::cout<<"Folder "<<filefolder<<" exists."<<std::endl;
-	filestream<<"Folder"<<filefolder<<" exists."<<std::endl;
+	    filestream<<"Folder"<<filefolder<<" exists."<<std::endl;
         count_file += 1;
         filefolder = path + std::to_string(count_file);
     }            
     mkdir(filefolder.c_str(), 0777);
+    mkdir((filefolder+pathleft).c_str(), 0777);
+    mkdir((filefolder+pathright).c_str(), 0777);
+    mkdir((filefolder+pathdepth).c_str(), 0777);
     std::cout<<"Folder "<<filefolder<<" created."<<std::endl;
     filestream<<"Folder"<<filefolder<<" created."<<std::endl;
 
     while (key != 'q') {
         if (zed.grab(runtime_parameters) == SUCCESS) {
-            start = std::clock();
-            while(duration < interval){
-                duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
-            }
-            std::cout << "Duration: "<< duration <<std::endl;
+            //start = std::clock();
+            //while(duration < interval){
+            //    duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
+            //}
+            //std::cout << "Duration: "<< duration <<std::endl;
     	    //filestream << "Duration: "<< duration <<std::endl;
 	        duration = 0;
             //save images
-            saveLeftImage(zed, filefolder.c_str() + prefixLeft + std::to_string(count_save) + std::string(".png"));
-            saveDepth(zed, filefolder.c_str() + prefixDepth + std::to_string(count_save));           
+            saveLeftImage(zed, filefolder.c_str() + pathleft + prefixLeft + std::to_string(count_save) + std::string(".png"));
+            saveRightImage(zed, filefolder.c_str() + pathright + prefixRight + std::to_string(count_save) + std::string(".png"));
+            saveDepth(zed, filefolder.c_str() + pathdepth + prefixDepth + std::to_string(count_save));           
     	    filestream << "Image "<< count_save << " save into folder: "<< filefolder <<std::endl;
             count_save++;
         } else {

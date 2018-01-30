@@ -157,3 +157,23 @@ void saveLeftImage(Camera& zed, std::string filename) {
     cv::cvtColor(left_image, left_image, CV_RGBA2RGB);
     cv::imwrite(filename, left_image);
 }
+void saveRightImage(Camera& zed, std::string filename) {
+    Resolution image_size = zed.getResolution();
+
+    cv::Mat sbs_image(image_size.height, image_size.width * 2, CV_8UC4);
+    cv::Mat right_image(sbs_image, cv::Rect(0, 0, image_size.width, image_size.height));
+    //cv::Mat right_image(sbs_image, cv::Rect(image_size.width, 0, image_size.width, image_size.height));
+
+    Mat buffer_sl;
+    cv::Mat buffer_cv;
+
+    zed.retrieveImage(buffer_sl, VIEW_RIGHT);
+    buffer_cv = cv::Mat(buffer_sl.getHeight(), buffer_sl.getWidth(), CV_8UC4, buffer_sl.getPtr<sl::uchar1>(MEM_CPU));
+    buffer_cv.copyTo(right_image);
+    //zed.retrieveImage(buffer_sl, VIEW_RIGHT);
+    //buffer_cv = cv::Mat(buffer_sl.getHeight(), buffer_sl.getWidth(), CV_8UC4, buffer_sl.getPtr<sl::uchar1>(MEM_CPU));
+    //buffer_cv.copyTo(right_image);
+
+    cv::cvtColor(right_image, right_image, CV_RGBA2RGB);
+    cv::imwrite(filename, right_image);
+}

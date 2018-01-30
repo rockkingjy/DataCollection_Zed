@@ -37,13 +37,13 @@ kill ZED thread
 ps aux | grep ZED
 sudo kill <threadnumber>
 ```
-
-# Check loaded sd card
+# Operations for sd card:
+## Check loaded sd card
 ```
 lsblk
 ```
 
-# Format sd card
+## Format sd card
 ```
 sudo mkfs.ext3 /dev/mmcblk1p1
 ```
