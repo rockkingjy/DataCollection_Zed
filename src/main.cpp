@@ -36,12 +36,14 @@
 #include <iostream>
 #include <cstdio>
 #include <ctime>
-
+#include <chrono>
+#include <sys/time.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <dirent.h>
 
 using namespace sl;
+using namespace std::chrono;
 
 cv::Mat slMat2cvMat(Mat& input);
 void printHelp();
@@ -49,6 +51,10 @@ void printHelp();
 
 int main(int argc, char **argv) {
     int ret;//return for system commands
+    struct timeval timenow;
+    gettimeofday(&timenow,0);
+    long timemilli = timenow.tv_sec * 1000 + timenow.tv_usec / 1000;
+    std::cout << std::to_string(timemilli) << std::endl;
 
     //Waiting for boot up
     std::clock_t start;
@@ -67,7 +73,7 @@ int main(int argc, char **argv) {
     }
     std::ofstream filestream(logfile.c_str());
     filestream<<"Start running ZED programme..."<<std::endl;
-
+/*
     //mount the sd card
     ret = system("mkdir /media/nvidia/zed/");
     ret = system("umount /dev/mmcblk1p1");
@@ -77,7 +83,7 @@ int main(int argc, char **argv) {
         filestream<<"SD card mount failed."<<std::endl;
     }
     filestream<<"SD card mounted to /media/nvidia/zed/"<<std::endl;
-
+*/
     //imgfile for store the images
     DIR* dir = opendir(path.c_str());
     if (dir)
@@ -121,8 +127,8 @@ int main(int argc, char **argv) {
 
     // Prepare new image size to retrieve half-resolution images
     Resolution image_size = zed.getResolution();
-    int new_width = image_size.width;// / 2;
-    int new_height = image_size.height;// / 2;
+    int new_width = image_size.width;
+    int new_height = image_size.height;
 
     // To share data between sl::Mat and cv::Mat, use slMat2cvMat()
     // Only the headers and pointer to the sl::Mat are copied, not the data itself
@@ -147,7 +153,7 @@ int main(int argc, char **argv) {
     }            
     mkdir(filefolder.c_str(), 0777);
     mkdir((filefolder+pathleft).c_str(), 0777);
-    mkdir((filefolder+pathright).c_str(), 0777);
+    //mkdir((filefolder+pathright).c_str(), 0777);
     mkdir((filefolder+pathdepth).c_str(), 0777);
     std::cout<<"Folder "<<filefolder<<" created."<<std::endl;
     filestream<<"Folder"<<filefolder<<" created."<<std::endl;
@@ -162,11 +168,13 @@ int main(int argc, char **argv) {
     	    //filestream << "Duration: "<< duration <<std::endl;
 	        duration = 0;
             //save images
-            saveLeftImage(zed, filefolder.c_str() + pathleft + prefixLeft + std::to_string(count_save) + std::string(".png"));
-            saveRightImage(zed, filefolder.c_str() + pathright + prefixRight + std::to_string(count_save) + std::string(".png"));
-            saveDepth(zed, filefolder.c_str() + pathdepth + prefixDepth + std::to_string(count_save));           
-    	    filestream << "Image "<< count_save << " save into folder: "<< filefolder <<std::endl;
-            count_save++;
+            gettimeofday(&timenow,0);
+            timemilli = timenow.tv_sec * 1000 + timenow.tv_usec / 1000;
+            saveLeftImage(zed, filefolder.c_str() + pathleft + prefixLeft + std::to_string(timemilli) + std::string(".png"));
+            //saveRightImage(zed, filefolder.c_str() + pathright + prefixRight + std::to_string(timemilli) + std::string(".png"));
+            saveDepth(zed, filefolder.c_str() + pathdepth + prefixDepth  + std::to_string(timemilli) + std::string(".png"));
+    	    filestream << "Image "<< std::to_string(timemilli) << " save into folder: "<< filefolder <<std::endl;
+            //count_save++;
         } else {
 	    	filestream<<"ZED grab fail!"<<std::endl;
 	    	zed.close();

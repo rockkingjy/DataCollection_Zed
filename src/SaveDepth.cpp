@@ -161,7 +161,7 @@ void saveRightImage(Camera& zed, std::string filename) {
     Resolution image_size = zed.getResolution();
 
     cv::Mat sbs_image(image_size.height, image_size.width * 2, CV_8UC4);
-    cv::Mat right_image(sbs_image, cv::Rect(0, 0, image_size.width, image_size.height));
+    cv::Mat right_image(sbs_image, cv::Rect(image_size.width+1, 0, image_size.width * 2, image_size.height));
     //cv::Mat right_image(sbs_image, cv::Rect(image_size.width, 0, image_size.width, image_size.height));
 
     Mat buffer_sl;
